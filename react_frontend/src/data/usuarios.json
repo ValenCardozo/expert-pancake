@@ -1,0 +1,39 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "email": "juan.perez@example.com",
+      "telefono": "123-456-7890",
+      "direccion": "Av. Principal 123, Ciudad Central"
+    },
+    {
+      "id": 2,
+      "nombre": "María González",
+      "email": "maria.gonzalez@example.com",
+      "telefono": "987-654-3210",
+      "direccion": "Calle Secundaria 456, Barrio Norte"
+    },
+    {
+      "id": 3,
+      "nombre": "Carlos Rodríguez",
+      "email": "carlos.rodriguez@example.com",
+      "telefono": "555-123-4567",
+      "direccion": "Plaza Central 789, Ciudad Sur"
+    },
+    {
+      "id": 4,
+      "nombre": "Ana López",
+      "email": "ana.lopez@example.com",
+      "telefono": "444-777-8888",
+      "direccion": "Av. Libertad 321, Villa Este"
+    },
+    {
+      "id": 5,
+      "nombre": "Roberto Martínez",
+      "email": "roberto.martinez@example.com",
+      "telefono": "222-333-9999",
+      "direccion": "Paseo del Parque 567, Zona Oeste"
+    }
+  ]
+}

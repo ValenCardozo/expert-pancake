@@ -1,0 +1,39 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Laptop HP Pavilion",
+      "precio": 899.99,
+      "descripcion": "Laptop HP Pavilion con 16GB RAM, 512GB SSD, Intel Core i7",
+      "stock": 25
+    },
+    {
+      "id": 2,
+      "nombre": "Monitor LG 27 pulgadas",
+      "precio": 249.99,
+      "descripcion": "Monitor LG de 27 pulgadas con resolución 4K y panel IPS",
+      "stock": 40
+    },
+    {
+      "id": 3,
+      "nombre": "Teclado Mecánico Logitech",
+      "precio": 79.99,
+      "descripcion": "Teclado mecánico Logitech con retroiluminación RGB",
+      "stock": 50
+    },
+    {
+      "id": 4,
+      "nombre": "Mouse Inalámbrico",
+      "precio": 29.99,
+      "descripcion": "Mouse inalámbrico ergonómico con 6 botones programables",
+      "stock": 100
+    },
+    {
+      "id": 5,
+      "nombre": "Auriculares Bluetooth",
+      "precio": 129.99,
+      "descripcion": "Auriculares Bluetooth con cancelación de ruido y 30 horas de batería",
+      "stock": 35
+    }
+  ]
+}
