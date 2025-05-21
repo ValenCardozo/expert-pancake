@@ -4,13 +4,16 @@ import Notification from '../components/Notification';
 // Crear el contexto
 const NotificationContext = createContext();
 
+let notificationId = 0;
+
 // Proveedor del contexto
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
 
   // Añadir una nueva notificación
   const addNotification = (message, type = 'success', duration = 3000) => {
-    const id = Date.now();
+    notificationId += 1;
+    const id = notificationId;
     setNotifications(prev => [...prev, { id, message, type, duration }]);
     return id;
   };

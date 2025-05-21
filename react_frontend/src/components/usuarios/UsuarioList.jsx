@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import UsuarioService from '../../services/UsuarioService';
 import { useNotification } from '../../context/NotificationContext';
 
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Message } from 'primereact/message';
+import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+
 const UsuarioList = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,9 +29,18 @@ const UsuarioList = () => {
         setLoading(false);
       }
     };
-
     fetchUsuarios();
-  }, [showError]);
+  }, []);
+
+  const confirmDeleteUsuario = (id) => {
+    confirmDialog({
+      message: '¿Estás seguro que deseas eliminar este usuario?',
+      header: 'Confirmación de eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptClassName: 'p-button-danger',
+      accept: () => handleDelete(id)
+    });
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -36,90 +53,70 @@ const UsuarioList = () => {
     }
   };
 
+  const actionBodyTemplate = (rowData) => (
+    <div className="flex gap-2">
+      <Link to={`/usuarios/${rowData.id}`}>
+        <Button icon="pi pi-eye" className="p-button-rounded p-button-info p-button-sm" />
+      </Link>
+      <Link to={`/usuarios/edit/${rowData.id}`}>
+        <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-button-sm" />
+      </Link>
+      <Button 
+        icon="pi pi-trash" 
+        className="p-button-rounded p-button-danger p-button-sm" 
+        onClick={() => confirmDeleteUsuario(rowData.id)} 
+      />
+    </div>
+  );
+
+  const header = (
+    <div className="flex justify-content-between align-items-center">
+      <h2>Usuarios</h2>
+      <Link to="/usuarios/new">
+        <Button icon="pi pi-plus" label="Nuevo Usuario" className="p-button-success" />
+      </Link>
+    </div>
+  );
+
   if (loading) return (
-    <div className="flex items-center justify-center h-48 bg-gray-50">
-      <div className="text-center">
-        <div className="spinner-border inline-block w-4 h-4 border-2 rounded-full text-indigo-500" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-        <p className="mt-2 text-sm text-gray-600">Cargando usuarios...</p>
-      </div>
+    <div className="flex justify-content-center align-items-center" style={{ height: '300px' }}>
+      <ProgressSpinner />
     </div>
   );
 
   if (error) return (
-    <div className="rounded-md bg-red-50 p-3 my-3">
-      <div className="flex">
-        <div className="flex-shrink-0">
-          <svg className="h-3 w-3 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
-        </div>
-        <div className="ml-2">
-          <h3 className="text-xs font-medium text-red-800">{error}</h3>
-        </div>
-      </div>
+    <Message severity="error" text={error} />
+  );
+
+  const emptyTemplate = () => (
+    <div className="text-center p-5">
+      <p className="mb-3">No hay usuarios disponibles</p>
+      <Link to="/usuarios/new">
+        <Button label="Agregar un usuario" icon="pi pi-plus" />
+      </Link>
     </div>
   );
 
   return (
-    <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-      <div className="px-3 py-4 sm:px-4 flex justify-between items-center">
-        <div>
-          <h2 className="text-base leading-6 font-medium text-gray-900">Usuarios</h2>
-          <p className="mt-1 max-w-2xl text-xs text-gray-500">Listado de todos los usuarios</p>
-        </div>
-        <Link to="/usuarios/new" className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          <svg className="-ml-0.5 mr-1.5 h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Nuevo Usuario
-        </Link>
-      </div>
-      
-      <div className="overflow-x-auto">
-        {usuarios.length > 0 ? (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
-                <th scope="col" className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {usuarios.map(usuario => (
-                <tr key={usuario.id} className="hover:bg-gray-50">
-                  <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-gray-900">{usuario.id}</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-500">{usuario.nombre}</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-500">{usuario.email}</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-500">{usuario.telefono}</td>
-                  <td className="px-3 py-2 whitespace-nowrap text-right text-xs font-medium">
-                    <Link to={`/usuarios/${usuario.id}`} className="text-indigo-600 hover:text-indigo-900 mr-2">Ver</Link>
-                    <Link to={`/usuarios/edit/${usuario.id}`} className="text-amber-600 hover:text-amber-900 mr-2">Editar</Link>
-                    <button 
-                      onClick={() => handleDelete(usuario.id)} 
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className="py-6 text-center">
-            <p className="text-sm text-gray-500">No hay usuarios disponibles</p>
-            <Link to="/usuarios/new" className="mt-3 inline-flex items-center px-3 py-1.5 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-              Agregar un usuario
-            </Link>
-          </div>
-        )}
-      </div>
-    </div>
+    <Card>
+      <ConfirmDialog />
+      <DataTable
+        value={usuarios}
+        header={header}
+        emptyMessage={emptyTemplate}
+        responsiveLayout="scroll"
+        stripedRows
+        paginator
+        rows={10}
+        rowsPerPageOptions={[10, 20, 50]}
+      >
+        <Column field="id" header="ID" sortable style={{ width: '10%' }} />
+        <Column field="nombre" header="Nombre" sortable style={{ width: '25%' }} />
+        <Column field="email" header="Email" sortable style={{ width: '25%' }} />
+        <Column field="telefono" header="Teléfono" sortable style={{ width: '20%' }} />
+        <Column body={actionBodyTemplate} style={{ width: '20%', textAlign: 'center' }} />
+      </DataTable>
+    </Card>
   );
 };
 

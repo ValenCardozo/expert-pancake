@@ -1,5 +1,5 @@
 import axios from 'axios';
-import usuariosData from '../data/usuarios.json';
+// import usuariosData from '../data/usuarios.json';
 
 // API URL for future use with a real backend
 const API_URL = 'http://localhost:3000/api';
@@ -20,17 +20,16 @@ export const UsuarioService = {
     }
   },
 
-  // Get a single usuario by id
+
   getUsuarioById: async (id) => {
     try {
-      // Simulate API call delay
       await delay(200);
       const usuario = usuariosData.usuarios.find(u => u.id === parseInt(id));
-      
+
       if (!usuario) {
         throw new Error(`Usuario with id ${id} not found`);
       }
-      
+
       return usuario;
     } catch (error) {
       console.error(`Error fetching usuario with id ${id}:`, error);
@@ -38,7 +37,6 @@ export const UsuarioService = {
     }
   },
 
-  // Create a new usuario (simulated)
   createUsuario: async (usuarioData) => {
     try {
       // Simulate API call delay

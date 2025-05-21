@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 
+// Componentes de PrimeReact
+import { Menubar } from 'primereact/menubar';
+import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { Sidebar } from 'primereact/sidebar';
+
 // Componentes de Productos
 import ProductoList from './components/productos/ProductoList';
 import ProductoDetail from './components/productos/ProductoDetail';
@@ -17,125 +23,74 @@ import { NotificationProvider } from './context/NotificationContext';
 import Notification from './components/Notification';
 
 function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  const items = [
+    {
+      label: 'Inicio',
+      icon: 'pi pi-fw pi-home',
+      url: '/'
+    },
+    {
+      label: 'Productos',
+      icon: 'pi pi-fw pi-shopping-cart',
+      url: '/productos'
+    },
+    {
+      label: 'Usuarios',
+      icon: 'pi pi-fw pi-users',
+      url: '/usuarios'
+    }
+  ];
+
+  const start = <div className="nav-logo">Mi Aplicación</div>;
+  const end = (
+    <Button
+      icon="pi pi-bars"
+      onClick={() => setSidebarVisible(true)}
+      className="p-button-text p-button-rounded p-button-plain"
+      style={{ display: 'none' }}
+    />
+  );
 
   return (
     <NotificationProvider>
       <Router>
-        <div className="app-container min-h-screen bg-gray-50">
-          <nav className="bg-white shadow-sm">
-            <div className="max-w-7xl mx-auto px-2 sm:px-4">
-              <div className="flex justify-between h-14">
-                <div className="flex">
-                  <div className="flex-shrink-0 flex items-center">
-                    <span className="text-indigo-600 font-bold text-base">Mi Aplicación</span>
-                  </div>
-                  <div className="hidden sm:ml-6 sm:flex sm:space-x-4">
-                    <Link to="/" className="px-2 py-1 text-sm font-medium text-gray-900 rounded-md">
-                      Inicio
-                    </Link>
-                    <Link to="/productos" className="px-2 py-1 text-sm font-medium text-gray-900 rounded-md">
-                      Productos
-                    </Link>
-                    <Link to="/usuarios" className="px-2 py-1 text-sm font-medium text-gray-900 rounded-md">
-                      Usuarios
-                    </Link>
-                  </div>
-                </div>
-                
-                {/* Menú mobile */}
-                <div className="-mr-2 flex items-center sm:hidden">
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                    aria-controls="mobile-menu"
-                    aria-expanded="false"
-                    onClick={toggleMobileMenu}
-                  >
-                    <span className="sr-only">Abrir menú principal</span>
-                    <svg
-                      className={`${mobileMenuOpen ? 'hidden' : 'block'} h-4 w-4`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                    <svg
-                      className={`${mobileMenuOpen ? 'block' : 'hidden'} h-4 w-4`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </nav>
+        <div className="app-container">
+          <Menubar model={items} start={start} end={end} className="mb-4" />
 
-          <div className={`${mobileMenuOpen ? 'block' : 'hidden'} sm:hidden`} id="mobile-menu">
-            <div className="pt-2 pb-3 space-y-1">
-              <Link 
-                to="/" 
-                className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Inicio
+          <Sidebar visible={sidebarVisible} onHide={() => setSidebarVisible(false)}>
+            <h3>Menú</h3>
+            <div className="mobile-menu">
+              <Link to="/" onClick={() => setSidebarVisible(false)}>
+                <i className="pi pi-home mr-2"></i>Inicio
               </Link>
-              <Link 
-                to="/productos" 
-                className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Productos
+              <Link to="/productos" onClick={() => setSidebarVisible(false)}>
+                <i className="pi pi-shopping-cart mr-2"></i>Productos
               </Link>
-              <Link 
-                to="/usuarios" 
-                className="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Usuarios
+              <Link to="/usuarios" onClick={() => setSidebarVisible(false)}>
+                <i className="pi pi-users mr-2"></i>Usuarios
               </Link>
             </div>
-          </div>
+          </Sidebar>
 
-          <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4">
+          <div className="main-content">
             <Notification />
-            
-            <div className="bg-white shadow rounded-lg p-2 sm:p-4">
+
+            <Card>
               <Routes>
                 <Route path="/" element={
                   <div className="text-center py-4">
-                    <h1 className="text-lg font-semibold text-gray-900">Bienvenido a Mi Aplicación</h1>
+                    <h1 className="font-semibold text-gray-900">Bienvenido a Mi Aplicación</h1>
                     <p className="mt-2 text-sm text-gray-600">
                       Selecciona una opción del menú para comenzar
                     </p>
-                    <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                      <Link to="/productos" className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                        Ver Productos
+                    <div className="mt-4 flex flex-col gap-3 justify-center">
+                      <Link to="/productos">
+                        <Button label="Ver Productos" icon="pi pi-shopping-cart" className="p-button-raised mb-2" />
                       </Link>
-                      <Link to="/usuarios" className="inline-flex items-center px-3 py-1.5 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                        Ver Usuarios
+                      <Link to="/usuarios">
+                        <Button label="Ver Usuarios" icon="pi pi-users" className="p-button-raised" />
                       </Link>
                     </div>
                   </div>
@@ -153,10 +108,10 @@ function App() {
                 <Route path="/usuarios/new" element={<UsuarioForm />} />
                 <Route path="/usuarios/edit/:id" element={<UsuarioForm />} />
               </Routes>
-            </div>
+            </Card>
           </div>
-          
-          <footer className="bg-white mt-4 py-3 text-center text-xs text-gray-500">
+
+          <footer>
             <p>© {new Date().getFullYear()} Mi Aplicación. Todos los derechos reservados.</p>
           </footer>
         </div>

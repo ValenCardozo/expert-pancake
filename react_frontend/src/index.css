@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* Estilos base */
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,20 +10,17 @@
 html {
   font-size: 14px; /* Reducimos el tamaño base de la fuente */
   -webkit-text-size-adjust: 100%;
-  zoom: 0.95; /* Ajuste global del zoom */
 }
 
 @media (min-width: 768px) {
   html {
     font-size: 16px; /* Tamaño normal en pantallas medianas y grandes */
-    zoom: 1; /* Zoom normal para pantallas más grandes */
   }
 }
 
 @media (max-width: 640px) {
   html {
     font-size: 13px;
-    zoom: 0.9;
   }
 }
 
@@ -38,92 +32,209 @@ body {
   width: 100%;
   overflow-x: hidden;
   font-size: 0.9rem; /* Reducir tamaño base de fuente del cuerpo */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f9fafb; /* Equivalente a bg-gray-50 */
 }
 
-/* Ajustes para el contenedor principal */
-.max-w-7xl {
+/* Contenedor principal */
+.container {
   max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-/* Estilos personalizados para los inputs */
+/* Estilos para formularios */
 input, textarea, select {
-  font-size: 0.875rem !important;
+  font-size: 0.875rem;
   max-height: 2.5rem;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  width: 100%;
 }
 
-/* Ajustes para las tablas en dispositivos móviles */
+/* Ajustes para las tablas */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
 @media (max-width: 640px) {
-  .overflow-x-auto {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
   table {
     font-size: 0.75rem;
-    transform: scale(0.95);
-    transform-origin: left top;
   }
   
   th, td {
-    padding: 0.5rem 0.25rem !important;
+    padding: 0.5rem 0.25rem;
   }
-}
-
-/* Mejor adaptación del contenido */
-.container-fluid {
-  width: 100%;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-/* Mejora para dispositivos móviles */
-@media (max-width: 640px) {
+  
   button {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 }
 
-/* Ajuste para todos los elementos de interfaz */
-* {
-  max-width: 100%;
-}
-
+/* Enlaces */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #4f46e5; /* Equivalente a indigo-600 */
   text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+  color: #4338ca; /* Equivalente a indigo-700 */
 }
 
+/* Encabezados */
 h1 {
-  font-size: 2.5em; /* Reducido de 3.2em */
+  font-size: 2.5em;
   line-height: 1.1;
 }
 
+/* Botones */
 button, .button {
-  border-radius: 8px;
+  border-radius: 0.375rem;
   border: 1px solid transparent;
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #4f46e5; /* Equivalente a indigo-600 */
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s;
   line-height: 1.5;
 }
-button:hover {
-  border-color: #646cff;
+
+button:hover, .button:hover {
+  background-color: #4338ca; /* Equivalente a indigo-700 */
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* App container */
+.app-container {
+  min-height: 100vh;
+  background-color: #f9fafb; /* Equivalente a bg-gray-50 */
+}
+
+/* Navegación */
+nav {
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.nav-logo {
+  color: #4f46e5;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .nav-links {
+    display: flex;
+    margin-left: 1.5rem;
+  }
+  
+  .nav-links a {
+    padding: 0.5rem;
+    margin: 0 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    border-radius: 0.375rem;
+  }
+  
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+.mobile-menu-button {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  color: #9ca3af;
+}
+
+.mobile-menu-button:hover {
+  color: #6b7280;
+  background-color: #f9fafb;
+}
+
+.mobile-menu {
+  padding: 0.5rem 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem 0;
+  border-left: 4px solid transparent;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.mobile-menu a:hover {
+  background-color: #f9fafb;
+  border-left-color: #d1d5db;
+  color: #111827;
+}
+
+/* Contenido principal */
+.main-content {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* Footer */
+footer {
+  background-color: white;
+  margin-top: 1rem;
+  padding: 0.75rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
 @media (prefers-color-scheme: light) {
@@ -131,45 +242,49 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-/* Estilos para tablas y formularios */
-.table-container {
-  max-width: 100%;
-  overflow-x: auto;
-  transform: scale(0.98);
-  transform-origin: left top;
-  margin-bottom: 1rem;
-}
-
-/* Limitar el ancho máximo de la interfaz */
-.container-max {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-/* Prevenir el zoom automático en dispositivos móviles */
-@media screen and (max-width: 768px) {
-  input, select, textarea {
-    font-size: 16px !important; /* Previene el zoom automático en iOS */
+  
+  button.secondary {
+    background-color: #f3f4f6;
+    color: #111827;
   }
 }
 
-/* Ajuste específico para el contenido principal */
-.app-container {
-  transform: scale(0.98);
-  transform-origin: center top;
-  width: 98%;
-  margin: 0 auto;
+/* Diseño de botones primarios y secundarios */
+.btn-primary {
+  background-color: #4f46e5;
+  color: white;
 }
 
-/* Meta tag para prevenir el zoom en dispositivos móviles */
-head, meta[name="viewport"] {
-  content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+.btn-secondary {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+/* Utilidades de espaciado */
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+
+/* Utilidades de flexbox */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.justify-center { justify-content: center; }
+.items-center { align-items: center; }
+.gap-3 { gap: 0.75rem; }
+
+/* Utilidades de texto */
+.text-center { text-align: center; }
+.text-lg { font-size: 1.125rem; }
+.text-sm { font-size: 0.875rem; }
+.font-semibold { font-weight: 600; }
+.text-gray-900 { color: #111827; }
+.text-gray-600 { color: #4b5563; }
+.text-gray-500 { color: #6b7280; }
+
+/* Media queries */
+@media (min-width: 640px) {
+  .flex-row-sm { flex-direction: row; }
 }
