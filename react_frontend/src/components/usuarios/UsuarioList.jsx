@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import UsuarioService from '../../services/UsuarioService';
 import { useNotification } from '../../context/NotificationContext';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -53,6 +55,17 @@ const UsuarioList = () => {
     }
   };
 
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Listado de Usuarios', 14, 14);
+    autoTable(doc, {
+      head: [['Nombre', 'Email', 'Edad']],
+      body: usuarios.map(u => [u.name, u.email, u.age]),
+      startY: 20,
+    });
+    doc.save('usuarios.pdf');
+  };
+
   const actionBodyTemplate = (rowData) => (
     <div className="flex gap-2">
       <Link to={`/usuarios/${rowData.id}`}>
@@ -70,11 +83,14 @@ const UsuarioList = () => {
   );
 
   const header = (
-    <div className="flex justify-content-between align-items-center w-full" style={{ width: '100%' }}>
-      <h2 className="m-0">Usuarios</h2>
-      <Link to="/usuarios/new" style={{ marginLeft: '50%' }}>
-        <Button icon="pi pi-plus" label="Nuevo Usuario" className="p-button-success" />
-      </Link>
+    <div className="flex justify-content-between align-items-center">
+      <h2>Usuarios</h2>
+      <div>
+        <Button icon="pi pi-file-pdf" label="Exportar PDF" className="p-button-success mr-2" onClick={exportPDF} />
+        <Link to="/usuarios/new">
+          <Button icon="pi pi-plus" label="Nuevo Usuario" className="p-button-success" />
+        </Link>
+      </div>
     </div>
   );
 

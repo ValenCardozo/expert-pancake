@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import { useNotification } from '../../context/NotificationContext';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 // Componentes PrimeReact
 import { DataTable } from 'primereact/datatable';
@@ -55,6 +57,17 @@ const ProductoList = () => {
     }
   };
 
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Listado de Productos', 14, 14);
+    autoTable(doc, {
+      head: [['Nombre', 'Precio']],
+      body: productos.map(p => [p.name, `$${p.price}`]),
+      startY: 20,
+    });
+    doc.save('productos.pdf');
+  };
+
   const actionBodyTemplate = (rowData) => {
     console.log(rowData.id);
     return (
@@ -77,9 +90,12 @@ const ProductoList = () => {
   const header = (
     <div className="flex justify-content-between align-items-center">
       <h2>Productos</h2>
-      <Link to="/productos/new" style={{ marginLeft: '30%' }}>
-        <Button icon="pi pi-plus" label="Nuevo Producto" className="p-button-success" />
-      </Link>
+      <div>
+        <Button icon="pi pi-file-pdf" label="Exportar PDF" className="p-button-danger mr-2" onClick={exportPDF} />
+        <Link to="/productos/new">
+          <Button icon="pi pi-plus" label="Nuevo Producto" className="p-button-success" />
+        </Link>
+      </div>
     </div>
   );
 
