@@ -61,18 +61,18 @@ const UsuarioList = () => {
       <Link to={`/usuarios/edit/${rowData.id}`}>
         <Button icon="pi pi-pencil" className="p-button-rounded p-button-warning p-button-sm" />
       </Link>
-      <Button 
-        icon="pi pi-trash" 
-        className="p-button-rounded p-button-danger p-button-sm" 
-        onClick={() => confirmDeleteUsuario(rowData.id)} 
+      <Button
+        icon="pi pi-trash"
+        className="p-button-rounded p-button-danger p-button-sm"
+        onClick={() => confirmDeleteUsuario(rowData.id)}
       />
     </div>
   );
 
   const header = (
-    <div className="flex justify-content-between align-items-center">
-      <h2>Usuarios</h2>
-      <Link to="/usuarios/new">
+    <div className="flex justify-content-between align-items-center w-full" style={{ width: '100%' }}>
+      <h2 className="m-0">Usuarios</h2>
+      <Link to="/usuarios/new" style={{ marginLeft: '50%' }}>
         <Button icon="pi pi-plus" label="Nuevo Usuario" className="p-button-success" />
       </Link>
     </div>
@@ -110,10 +110,9 @@ const UsuarioList = () => {
         rows={10}
         rowsPerPageOptions={[10, 20, 50]}
       >
-        <Column field="id" header="ID" sortable style={{ width: '10%' }} />
-        <Column field="nombre" header="Nombre" sortable style={{ width: '25%' }} />
+        <Column field="name" header="Nombre" sortable style={{ width: '25%' }} />
         <Column field="email" header="Email" sortable style={{ width: '25%' }} />
-        <Column field="telefono" header="Teléfono" sortable style={{ width: '20%' }} />
+        <Column field="age" header="Edad" sortable style={{ width: '20%' }} />
         <Column body={actionBodyTemplate} style={{ width: '20%', textAlign: 'center' }} />
       </DataTable>
     </Card>

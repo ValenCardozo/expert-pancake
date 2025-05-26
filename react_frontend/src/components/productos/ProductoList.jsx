@@ -77,7 +77,7 @@ const ProductoList = () => {
   const header = (
     <div className="flex justify-content-between align-items-center">
       <h2>Productos</h2>
-      <Link to="/productos/new">
+      <Link to="/productos/new" style={{ marginLeft: '30%' }}>
         <Button icon="pi pi-plus" label="Nuevo Producto" className="p-button-success" />
       </Link>
     </div>

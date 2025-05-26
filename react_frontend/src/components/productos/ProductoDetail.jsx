@@ -98,15 +98,6 @@ const ProductoDetail = () => {
       <ConfirmDialog />
       <div className="p-fluid">
         <Panel header="Información básica">
-          {/* <div className="grid">
-            <div className="col-12 md:col-3">
-              <h3>ID</h3>
-            </div>
-            <div className="col-12 md:col-9">
-              <p>{producto.id}</p>
-            </div>
-          </div>
-          <Divider /> */}
           <div className="grid">
             <div className="col-12 md:col-3">
               <h3>Nombre</h3>
