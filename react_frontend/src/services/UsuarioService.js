@@ -14,7 +14,6 @@ export const UsuarioService = {
     }
   },
 
-
   getUsuarioById: async (id) => {
     try {
       const response = await axios.get(`${API_URL}/users/${id}`);
@@ -53,6 +52,17 @@ export const UsuarioService = {
       return response.data;
     } catch (error) {
       console.error(`Error deleting usuario with id ${id}:`, error);
+      throw error;
+    }
+  },
+  
+  // Update user role
+  updateUserRole: async (id, roleData) => {
+    try {
+      const response = await axios.put(`${API_URL}/users/${id}/role`, roleData);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating role for user with id ${id}:`, error);
       throw error;
     }
   }
