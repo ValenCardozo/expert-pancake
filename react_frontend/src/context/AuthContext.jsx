@@ -16,14 +16,13 @@ export const AuthProvider = ({children}) =>{
             if(!decoded.exp || decoded.exp * 1000 < Date.now()){
                 return null;
             }
-            console.log("decoded", decoded);
 
             return{
                 id: decoded.user.id,
-                nombre:decoded.user.nombre,
+                name: decoded.user.name,
                 email: decoded.user.email,
-                edad: decoded.user.edad,
-                rol: decoded.user.rol
+                age: decoded.user.age,
+                role: decoded.user.role
             }
         } catch {
             return null
@@ -48,13 +47,15 @@ export const AuthProvider = ({children}) =>{
     const login = async (credentials)=>{
         try {
             const response = await axios.post('http://localhost:3003/auth/login',credentials)
-            console.log(response);
+
             if(response.status === 200){
                 const token = response?.data?.token
+
                 localStorage.setItem('token', token)
                 axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+
                 const userLogued = decodeUser(token)
-                console.log("userLogued", userLogued);
+
                 if(!userLogued){
                     localStorage.removeItem('token')
                     delete axios.defaults.headers.common["Authorization"]
@@ -68,9 +69,7 @@ export const AuthProvider = ({children}) =>{
                 alert('Las credenciales son erroneas')
             }
         } catch (error) {
-            console.log(error);
-
-            alert("Hubo error al iniciar sesion")
+            alert("Hubo error al iniciar sesion:" + error.message)
         }
     }
 

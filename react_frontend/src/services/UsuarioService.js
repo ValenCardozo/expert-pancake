@@ -3,10 +3,14 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3003';
 
 export const UsuarioService = {
-  // Get all usuarios
   getAllUsuarios: async () => {
     try {
-      const response = await axios.get(`${API_URL}/users`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       return response.data.users || response.data;
     } catch (error) {
       console.error('Error fetching usuarios:', error);

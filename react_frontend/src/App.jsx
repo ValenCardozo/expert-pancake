@@ -43,7 +43,6 @@ const AppContent = () => {
       }
     ];
 
-    console.log('EL USUARIO', user);
     if (user) {
       const authItems = [
         {
@@ -51,14 +50,15 @@ const AppContent = () => {
           icon: 'pi pi-fw pi-shopping-cart',
           url: '/productos'
         },
-        {
-          label: 'Usuarios',
-          icon: 'pi pi-fw pi-users',
-          url: '/usuarios'
-        }
+
       ];
 
       if (user.role === 'admin') {
+        authItems.push({
+          label: 'Usuarios',
+          icon: 'pi pi-fw pi-users',
+          url: '/usuarios'
+        });
         authItems.push({
           label: 'Panel Admin',
           icon: 'pi pi-fw pi-cog',
@@ -74,7 +74,7 @@ const AppContent = () => {
 
       return [...baseItems, ...authItems];
     } else {
-      // Menu for unauthenticated users
+
       const unauthItems = [
         {
           label: 'Iniciar Sesión',
@@ -165,7 +165,7 @@ const AppContent = () => {
               <div className="text-center py-4">
                 <h1 className="font-semibold text-gray-900">Bienvenido a Mi Aplicación</h1>
                 <p className="mt-2 text-sm text-gray-600">
-                  {user 
+                  {user
                     ? "Explora las opciones disponibles en el menú superior"
                     : "Inicia sesión o regístrate para comenzar"
                   }
@@ -176,9 +176,14 @@ const AppContent = () => {
                       <Link to="/productos">
                         <Button label="Ver Productos" icon="pi pi-shopping-cart" className="p-button-raised mb-2" />
                       </Link>
+                      {user.role === 'admin' && (
                       <Link to="/usuarios">
                         <Button label="Ver Usuarios" icon="pi pi-users" className="p-button-raised" />
+                      </Link>,
+                      <Link to="/admin/usuarios">
+                        <Button label="Ver Panel de Usuarios" icon="pi pi-users" className="p-button-raised" />
                       </Link>
+                      )}
                     </>
                   ) : (
                     <>
@@ -213,7 +218,7 @@ const AppContent = () => {
               <Route path="/usuarios/:id" element={<UsuarioDetail />} />
               <Route path="/usuarios/new" element={<UsuarioForm />} />
               <Route path="/usuarios/edit/:id" element={<UsuarioForm />} />
-              
+
               {/* Rutas de Admin - solo accesibles por admins */}
               <Route element={<RoleBasedRoute allowedRoles={['admin']} />}>
                 <Route path="/admin/usuarios" element={<UserRoleManagement />} />

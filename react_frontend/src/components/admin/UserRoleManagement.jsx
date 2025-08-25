@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import UsuarioService from '../../services/UsuarioService';
+import { Link } from 'react-router-dom';
+
 import { AuthContext } from '../../context/AuthContext';
 import { Card } from 'primereact/card';
 import { DataTable } from 'primereact/datatable';
@@ -8,13 +10,14 @@ import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Message } from 'primereact/message';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 const UserRoleManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user: currentUser } = useContext(AuthContext);
-  
+
   const roleOptions = [
     { label: 'Usuario', value: 'user' },
     { label: 'Administrador', value: 'admin' }
@@ -25,18 +28,26 @@ const UserRoleManagement = () => {
       try {
         const data = await UsuarioService.getAllUsuarios();
         setUsers(data);
-        setLoading(false);
-      } catch (err) {
-        setError('Error al cargar los usuarios');
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else if (data.users && Array.isArray(data.users)) {
+          setUsers(data.users);
+        } else {
+          throw new Error('Formato de datos inesperado');
+        }
+        console.log('Usuarios cargados:', users);
+      } catch (error) {
+        setError('Error al cargar los usuarios: ' + error.message);
+      } finally {
         setLoading(false);
       }
     };
-    
+
     fetchUsers();
   }, []);
 
   const handleRoleChange = (e, userId) => {
-    const updatedUsers = users.map(user => 
+    const updatedUsers = users.map(user =>
       user.id === userId ? { ...user, role: e.value } : user
     );
     setUsers(updatedUsers);
@@ -52,33 +63,46 @@ const UserRoleManagement = () => {
   };
 
   const roleBodyTemplate = (rowData) => {
-    // Disable editing own role or if not admin
     const isDisabled = rowData.id === currentUser?.id || currentUser?.role !== 'admin';
-    
+
     return (
       <Dropdown
         value={rowData.role || 'user'}
         options={roleOptions}
-        onChange={(e) => handleRoleChange(e, rowData.id)}
+        onChange={(e) => {
+          handleRoleChange(e, rowData.id);
+          saveRoleChange(rowData.id, e.value);
+        }}
         disabled={isDisabled}
       />
     );
   };
 
   const actionBodyTemplate = (rowData) => {
-    // Disable save button for own user or if not admin
     const isDisabled = rowData.id === currentUser?.id || currentUser?.role !== 'admin';
-    
+
     return (
-      <Button 
-        label="Guardar" 
-        icon="pi pi-save" 
-        onClick={() => saveRoleChange(rowData.id, rowData.role || 'user')} 
+      <Button
+        label="Guardar"
+        icon="pi pi-save"
+        onClick={() => saveRoleChange(rowData.id, rowData.role || 'user')}
         disabled={isDisabled}
         className="p-button-sm"
       />
     );
   };
+
+  const header = (
+    <div className="flex justify-content-between align-items-center">
+      <h2>Panel de usuarios</h2>
+      <div>
+        {/* <Button icon="pi pi-file-pdf" label="Exportar PDF" className="p-button-danger mr-2" onClick={exportPDF} /> */}
+        <Link to="/usuarios/new">
+          <Button icon="pi pi-plus" label="Nuevo Usuario" className="p-button-success" />
+        </Link>
+      </div>
+    </div>
+  );
 
   if (loading) return (
     <div className="flex justify-content-center align-items-center" style={{ height: '300px' }}>
@@ -90,13 +114,23 @@ const UserRoleManagement = () => {
     <Message severity="error" text={error} />
   );
 
+  const emptyTemplate = () => (
+    <div className="text-center p-5">
+      <p className="mb-3">No hay usuarios disponibles</p>
+      <Link to="/usuarios/new">
+        <Button label="Agregar un usuario" icon="pi pi-plus" />
+      </Link>
+    </div>
+  );
+
   return (
     <Card title="Gestión de Roles de Usuario">
       <p className="mb-3">Desde esta sección puedes asignar roles a los usuarios. Solo los administradores pueden cambiar roles.</p>
-      
+      <ConfirmDialog />
       <DataTable
+        header={header}
         value={users}
-        responsiveLayout="scroll"
+        emptyMessage={emptyTemplate}
         stripedRows
         paginator
         rows={10}
