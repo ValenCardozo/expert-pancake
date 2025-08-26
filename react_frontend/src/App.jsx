@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import './App.css'
 
 // Componentes de PrimeReact
@@ -23,7 +23,6 @@ import LoginForm from './layouts/auth/LoginForm';
 import RegisterForm from './layouts/auth/RegisterForm';
 import PrivateRoute from './components/auth/PrivateRoute';
 import PublicRoute from './components/auth/PublicRoute';
-import RoleBasedRoute from './components/auth/RoleBasedRoute';
 import UserRoleManagement from './components/admin/UserRoleManagement';
 
 import { NotificationProvider } from './context/NotificationContext';
@@ -33,13 +32,14 @@ import Notification from './components/Notification';
 const AppContent = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const getMenuItems = () => {
     const baseItems = [
       {
         label: 'Inicio',
         icon: 'pi pi-fw pi-home',
-        url: '/'
+        command: () => navigate('/')
       }
     ];
 
@@ -48,7 +48,7 @@ const AppContent = () => {
         {
           label: 'Productos',
           icon: 'pi pi-fw pi-shopping-cart',
-          url: '/productos'
+          command: () => navigate('/productos')
         },
 
       ];
@@ -57,12 +57,12 @@ const AppContent = () => {
         authItems.push({
           label: 'Usuarios',
           icon: 'pi pi-fw pi-users',
-          url: '/usuarios'
-        });
-        authItems.push({
+          command: () => navigate('/usuarios')
+        },
+        {
           label: 'Panel Admin',
           icon: 'pi pi-fw pi-cog',
-          url: '/admin/usuarios'
+          command: () => navigate('/admin/usuarios')
         });
       }
 
@@ -79,12 +79,12 @@ const AppContent = () => {
         {
           label: 'Iniciar Sesión',
           icon: 'pi pi-fw pi-sign-in',
-          url: '/inicio-sesion'
+          command: () => navigate('/inicio-sesion')
         },
         {
           label: 'Registrarse',
           icon: 'pi pi-fw pi-user-plus',
-          url: '/registro'
+          command: () => navigate('/registro')
         }
       ];
 
@@ -176,14 +176,16 @@ const AppContent = () => {
                       <Link to="/productos">
                         <Button label="Ver Productos" icon="pi pi-shopping-cart" className="p-button-raised mb-2" />
                       </Link>
-                      {user.role === 'admin' && (
+                      {user.role === 'admin' ? (
+                      <>
                       <Link to="/usuarios">
                         <Button label="Ver Usuarios" icon="pi pi-users" className="p-button-raised" />
-                      </Link>,
+                      </Link>
                       <Link to="/admin/usuarios">
                         <Button label="Ver Panel de Usuarios" icon="pi pi-users" className="p-button-raised" />
                       </Link>
-                      )}
+                      </>
+                      ) : null}
                     </>
                   ) : (
                     <>
@@ -218,11 +220,7 @@ const AppContent = () => {
               <Route path="/usuarios/:id" element={<UsuarioDetail />} />
               <Route path="/usuarios/new" element={<UsuarioForm />} />
               <Route path="/usuarios/edit/:id" element={<UsuarioForm />} />
-
-              {/* Rutas de Admin - solo accesibles por admins */}
-              <Route element={<RoleBasedRoute allowedRoles={['admin']} />}>
-                <Route path="/admin/usuarios" element={<UserRoleManagement />} />
-              </Route>
+              <Route path="/admin/usuarios" element={<UserRoleManagement />} />
             </Route>
           </Routes>
         </Card>

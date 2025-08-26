@@ -15,10 +15,9 @@ const UsuarioForm = () => {
   const { showSuccess, showError } = useNotification();
 
   const [formData, setFormData] = useState({
-    nombre: '',
+    name: '',
     email: '',
-    telefono: '',
-    direccion: ''
+    age: '',
   });
 
   const [loading, setLoading] = useState(isEditMode);

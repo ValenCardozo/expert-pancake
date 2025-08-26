@@ -54,6 +54,9 @@ const UserRoleManagement = () => {
   };
 
   const saveRoleChange = async (userId, newRole) => {
+    const confirmSave = window.confirm('¿Estás seguro de que deseas cambiar el rol de este usuario?');
+    if (!confirmSave) return;
+
     try {
       await UsuarioService.updateUserRole(userId, { role: newRole });
       alert('Rol actualizado correctamente');
@@ -63,30 +66,21 @@ const UserRoleManagement = () => {
   };
 
   const roleBodyTemplate = (rowData) => {
-    const isDisabled = rowData.id === currentUser?.id || currentUser?.role !== 'admin';
-
     return (
       <Dropdown
         value={rowData.role || 'user'}
         options={roleOptions}
-        onChange={(e) => {
-          handleRoleChange(e, rowData.id);
-          saveRoleChange(rowData.id, e.value);
-        }}
-        disabled={isDisabled}
+        onChange={(e) => handleRoleChange(e, rowData.id)}
       />
     );
   };
 
   const actionBodyTemplate = (rowData) => {
-    const isDisabled = rowData.id === currentUser?.id || currentUser?.role !== 'admin';
-
     return (
       <Button
         label="Guardar"
         icon="pi pi-save"
         onClick={() => saveRoleChange(rowData.id, rowData.role || 'user')}
-        disabled={isDisabled}
         className="p-button-sm"
       />
     );
