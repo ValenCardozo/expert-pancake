@@ -21,6 +21,8 @@ import UsuarioForm from './components/usuarios/UsuarioForm';
 // Componentes de Auth
 import LoginForm from './layouts/auth/LoginForm';
 import RegisterForm from './layouts/auth/RegisterForm';
+import ForgotPassword from './layouts/auth/ForgotPassword';
+import ResetPassword from './layouts/auth/ResetPassword';
 import PrivateRoute from './components/auth/PrivateRoute';
 import PublicRoute from './components/auth/PublicRoute';
 import UserRoleManagement from './components/admin/UserRoleManagement';
@@ -205,6 +207,8 @@ const AppContent = () => {
             <Route element={<PublicRoute />}>
               <Route path="/inicio-sesion" element={<LoginForm />} />
               <Route path="/registro" element={<RegisterForm />} />
+              <Route path='/clave-olvidada' element={<ForgotPassword/>}/>
+              <Route path='/recuperar-contraseña' element={<ResetPassword/>}/>
             </Route>
 
             {/* Rutas protegidas */}

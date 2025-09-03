@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import authService from "../services/authService";
 
 export const AuthContext = createContext()
 
@@ -46,10 +47,11 @@ export const AuthProvider = ({children}) =>{
 
     const login = async (credentials)=>{
         try {
-            const response = await axios.post('http://localhost:3003/auth/login',credentials)
+            // const response = await axios.post('http://localhost:3003/auth/login',credentials)
+            const {data, status} = await authService.login(credentials)
 
-            if(response.status === 200){
-                const token = response?.data?.token
+            if(status === 200){
+                const token = data?.token
 
                 localStorage.setItem('token', token)
                 axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
@@ -94,8 +96,38 @@ export const AuthProvider = ({children}) =>{
         navigate('/inicio-sesion')
     }
 
+    const forgotPassword = async (email) =>{
+        try {
+            await axios.post('http://localhost:3003/auth/forgotPassword', {email})
+            alert("Revisa tu correo electronico")
+            return true;
+        } catch (error) {
+            console.error(error.response.data || error)
+            return false
+        }
+    }
+
+    const resetPassword = async (id, token, newPassword) =>{
+        try {
+            const body = {
+                id: Number(id),
+                token,
+                newPassword
+            }
+
+            await axios.post('http://localhost:3003/auth/resetPassword', body)
+            alert("Contraseña actualizada correctamente")
+            navigate('/inicio-sesion')
+            return true
+        } catch (error) {
+            console.error(error.response.data || error)
+            alert("Error al actualizar la contraseña: " + error.message)
+            return false
+        }
+    }
+
     return(
-        <AuthContext.Provider value={{user, setUser, register, login, logout}}>
+        <AuthContext.Provider value={{user, setUser, register, login, logout, forgotPassword, resetPassword}}>
             {children}
         </AuthContext.Provider>
     )
